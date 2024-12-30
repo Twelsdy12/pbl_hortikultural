@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrasi Pengguna - Horti-Predict</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="login-container">
+        <div class="card p-4">
+            <div class="card-body">
+                <h1 class="text-center mb-4 text-success">
+                    <i class="fas fa-leaf"></i> Horti-Predict
+                </h1>
+                <h4 class="text-center mb-3">Registrasi Pengguna</h4>
+                <form id="registerForm">
+                    <div class="mb-3">
+                        <label for="registerUsername" class="form-label">Nama</label>
+                        <input type="text" class="form-control" id="registerUsername" name="username" placeholder="Masukkan Nama" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="registerEmail" class="form-label">E-mail</label>
+                        <input type="email" class="form-control" id="registerEmail" name="email" placeholder="Masukkan E-mail" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="registerPassword" class="form-label">Kata Sandi</label>
+                        <input type="password" class="form-control" id="registerPassword" name="password" placeholder="Masukkan Kata Sandi" required>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success">Daftar</button>
+                    </div>
+                </form>
+                <p class="text-center mt-3">
+                    Sudah punya akun? <a href="index.html" class="text-success">Login di sini</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

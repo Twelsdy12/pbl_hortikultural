@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <div class="container">
+           
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                  
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Beranda</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="prediksi.html">Prediksi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="tentang.html">Tentang</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="testimonial.html">Testimoni</a>
+                    </li>
+                </ul>
+               
+            </div>
+        </div>
+    </nav>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediksi - Horti-Predict</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+        #map {
+            height: 400px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .container {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-leaf me-2"></i> Horti-Predict
+            </a>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="text-center py-5 bg-light">
+        <div class="container">
+            <h1 class="display-5">Sistem Prediksi Tanaman Hortikultura</h1>
+            <p>Temukan tanaman hortikultura yang sesuai untuk wilayah Anda.</p>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="py-5 bg-white" id="peta">
+        <div class="container">
+            <h2 class="text-center">Peta Lokasi</h2>
+            <div id="map"></div>
+        </div>
+    </section>
+
+    <!-- Prediction Section -->
+    <section class="py-5 bg-light" id="prediksi">
+        <div class="container">
+            <h2 class="text-center mb-4">Prediksi Tanaman</h2>
+            <form id="predictionForm">
+                <!-- Pilihan Kabupaten -->
+                <div class="mb-3">
+                    <label for="kabupatenSelect" class="form-label">Pilih Kabupaten:</label>
+                    <select class="form-select" id="kabupatenSelect">
+                        <option value="">Pilih Kabupaten</option>
+                        <option value="Maros">Maros</option>
+                        <option value="Pangkep">Pangkep</option>
+                    </select>
+                </div>
+
+                <!-- Pilihan Kecamatan -->
+                <div id="kecamatanContainer" class="mb-3" style="display: none;">
+                    <label for="kecamatanSelect" class="form-label">Pilih Kecamatan:</label>
+                    <select class="form-select" id="kecamatanSelect" disabled>
+                        <option value="">Pilih Kecamatan</option>
+                    </select>
+                </div>
+
+                <!-- Input Bulan dan Tahun -->
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="bulan" class="form-label">Pilih Bulan:</label>
+                        <select class="form-select" id="bulan" name="bulan">
+                            <option value="">Pilih Bulan</option>
+                            <option value="1">Januari</option>
+                            <option value="2">Februari</option>
+                            <option value="3">Maret</option>
+                            <option value="4">April</option>
+                            <option value="5">Mei</option>
+                            <option value="6">Juni</option>
+                            <option value="7">Juli</option>
+                            <option value="8">Agustus</option>
+                            <option value="9">September</option>
+                            <option value="10">Oktober</option>
+                            <option value="11">November</option>
+                            <option value="12">Desember</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="tahun" class="form-label">Pilih Tahun:</label>
+                        <input type="number" class="form-control" id="tahun" placeholder="Contoh: 2024" min="2000" max="2100">
+                    </div>
+                </div>
+
+                <div class="d-grid">
+                    <button type="button" id="analyzeButton" class="btn btn-success">
+                        <i class="fas fa-search me-2"></i>Analisis Kesesuaian
+                    </button>
+                </div>
+            </form>
+
+            <!-- Hasil Analisis -->
+            <div id="analysisResult" class="mt-4" style="display: none;">
+                <h4>Hasil Analisis</h4>
+                <p id="analysisText"></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+       // Data kecamatan beserta koordinatnya
+       const kecamatan_coordinates = {
+            "Maros": {
+                "Turikale": [-5.0102, 119.6664],
+                "Tompobulu": [-5.0291, 119.5193],
+                "Tanralili": [-5.0140, 119.4873],
+                "Simbang": [-5.0825, 119.5524],
+                "Moncongloe": [-5.1134, 119.5238],
+                "Marusu": [-5.0217, 119.6210],
+                "Maros Baru": [-5.0433, 119.6600],
+                "Mandai": [-5.0506, 119.5812],
+                "Mallawa": [-4.8906, 119.4510],
+                "Lau": [-5.0211, 119.5854],
+                "Cenrana": [-5.0554, 119.4212],
+                "Camba": [-5.0793, 119.3579],
+                "Bontoa": [-5.1106, 119.6853],
+                "Bantimurung": [-5.0679, 119.5334]
+            },
+            "Pangkep": {
+                "Pangkajene": [-4.9493, 119.4699],
+                "Balocci": [-4.9990, 119.5381],
+                "Bungoro": [-4.9857, 119.5456],
+                "Labakkang": [-4.9352, 119.4851],
+                "Ma'rang": [-4.8673, 119.4539],
+                "Segeri": [-4.8310, 119.4008],
+                "Minasa Te'ne": [-4.9281, 119.5064],
+                "Tondong Tallasa": [-4.9781, 119.5693],
+                "Mandalle": [-4.7578, 119.3778],
+                "Liukang Tupabiring": [-4.8150, 119.5831],
+                "Liukang Tupabiring Utara": [-4.7700, 119.6161],
+                "Liukang Kalmas": [-4.9089, 119.7544],
+                "Liukang Tangaya": [-4.9333, 119.8000]
+            }
+        };
+
+        // Initialize map
+        const map = L.map('map').setView([-5.0, 119.5], 10);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // DOM elements
+        const kabupatenSelect = document.getElementById('kabupatenSelect');
+        const kecamatanSelect = document.getElementById('kecamatanSelect');
+        const kecamatanContainer = document.getElementById('kecamatanContainer');
+
+        // Handle Kabupaten change
+        kabupatenSelect.addEventListener('change', function () {
+            const selectedKabupaten = this.value;
+            kecamatanSelect.innerHTML = '<option value="">Pilih Kecamatan</option>';
+            kecamatanSelect.disabled = !selectedKabupaten;
+
+            if (selectedKabupaten && kecamatan_coordinates[selectedKabupaten]) {
+                kecamatanContainer.style.display = 'block';
+
+                Object.keys(kecamatan_coordinates[selectedKabupaten]).forEach(kecamatan => {
+                    const option = document.createElement('option');
+                    option.value = kecamatan;
+                    option.textContent = kecamatan;
+                    kecamatanSelect.appendChild(option);
+                });
+
+                // Fit map to kabupaten's kecamatan bounds
+                map.fitBounds(Object.values(kecamatan_coordinates[selectedKabupaten]));
+            } else {
+                kecamatanContainer.style.display = 'none';
+            }
+        });
+
+        // Handle Kecamatan change
+        kecamatanSelect.addEventListener('change', function () {
+            const selectedKabupaten = kabupatenSelect.value;
+            const selectedKecamatan = this.value;
+
+            if (selectedKabupaten && selectedKecamatan && kecamatan_coordinates[selectedKabupaten][selectedKecamatan]) {
+                const coords = kecamatan_coordinates[selectedKabupaten][selectedKecamatan];
+                map.setView(coords, 14);
+
+                L.marker(coords)
+                    .addTo(map)
+                    .bindPopup(`${selectedKecamatan}, ${selectedKabupaten}`)
+                    .openPopup();
+            }
+        });
+  </script>
+</body>
+</html>
