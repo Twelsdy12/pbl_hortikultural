@@ -1,51 +1,69 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+    background: linear-gradient(to right, #f1f2f4, #bbfab4);
+    font-family: 'Arial', sans-serif;
 }
 
-.navbar {
-    display: flex;
-    justify-content: space-between;
+.login-container {
+    padding: 20px;
+}
+
+.card {
+    width: 100%; /* Default untuk layar kecil */
+    max-width: 400px; /* Ukuran maksimal kotak */
+    margin: 0 auto; /* Tengah secara horizontal */
+    background: white;
+    animation: fadeIn 1s ease-in-out;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.card h1 {
+    font-weight: bold;
+    font-size: 1.8rem;
+    color: #28a745;
+    margin-bottom: 10px;
+}
+
+.form-label {
+    font-weight: bold;
+    color: #495057;
+}
+
+.form-control {
+    border-radius: 0.5rem;
+    border: 1px solid #ced4da;
+}
+
+.form-control:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+}
+
+.btn-success {
     background: #28a745;
-    .hero-section {
-        height: 100vh;
-        color: white;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    }
-    
-    #map {
-        height: 500px;
-        margin-top: 20px;
-    }
-    
-    footer {
-        font-size: 0.9rem;
-    }
-     padding: 1rem 2rem;
-    color: white;
+    border: none;
+    transition: background-color 0.3s ease;
 }
 
-.navbar a {
-    color: white;
-    text-decoration: none;
+.btn-success:hover {
+    background: #218838;
 }
 
-.navbar .active {
-    text-decoration: underline;
-}
-
-.hero {
+footer {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-top: 20px;
     text-align: center;
-    padding: 2rem;
-    background: #f0f0f0;
 }
 
-.cta-button {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background: #28a745;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
